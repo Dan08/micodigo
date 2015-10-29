@@ -77,6 +77,13 @@ BEGIN
         A2 := REGEXP_SUBSTR(CADENA, V_REGEXP, 1, 4);
       END IF;
       
+      /* para mantener consistencia, si es una actualizacion se inicializan los campos para tener una actualizacion limpia sin datos anteriores */
+      IF ACTUALIZAR = TRUE THEN
+        EXECUTE IMMEDIATE 
+          'UPDATE ' || TABLA || ' SET
+            NOMBRE_1 = NULL, NOMBRE_2 = NULL, APELLIDO_1 = NULL, APELLIDO_2 = NULL WHERE ROWID = ''' || V_ROWID || '''';
+      END IF;
+      
       IF APELLIDOS = TRUE THEN
         EXECUTE IMMEDIATE 
           'UPDATE ' || TABLA || ' SET
